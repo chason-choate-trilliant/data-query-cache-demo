@@ -2,12 +2,19 @@ import "./style.css";
 
 import typescriptLogo from "./typescript.svg";
 
+const token = 'blahblahblahblahblahblahblahblahblahblahblahblah'
+const apiURL = "https://api.eng.cachetest.io"
 async function requestData(path: string, method: string) {
   const res = await fetch(path, {
     method,
+    // cache: 'default',
+    // credentials: 'include',
     headers: {
-      "Authentication": "Bearer token"
-    }
+      "Accept": "*/*",
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+    // redirect: 'manual',
   })
   const data = await res.json()
   return data
@@ -37,11 +44,11 @@ enableMocking().then(() => {
 `;
 
   document.querySelector("#server-data-post")!.addEventListener("click", async () => {
-    const data = await requestData("/search:create", "post")
+    const data = await requestData(`${apiURL}/search:create`, "post")
     console.log(data)
   })
   document.querySelector("#mock-data")!.addEventListener("click", async () => {
-    const data = await requestData("/mock", "get")
+    const data = await requestData(`${apiURL}/search:execute?q=dGVzdA%3D%3D`, "get")
     console.log(data)
   })
 })

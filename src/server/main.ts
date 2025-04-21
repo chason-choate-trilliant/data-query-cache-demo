@@ -1,28 +1,45 @@
 import express from "express";
-import ViteExpress from "vite-express";
+import cors from 'cors';
 
-const app = express();
+const app = express()
+const port = 3002
+const corsOptions = {
+  origin: 'https://home.cachetest.io',
+  allowedHeaders: ['Content-Type', 'Authorization', 'If-None-Match'],
+  methods: ['DELETE', 'OPTIONS', 'PATCH', 'PUT'],
+  exposedHeaders: ['Etag'],
+  credentials: true,
+}
+
+app.set('etag', false)
+app.use(cors(corsOptions))
 
 app.post("/search:create", (req, res)  => {
-  console.log("POST /search")
-  const newURL = URL.parse('http://localhost:3000/search:execute')
-  newURL.searchParams.append('q', btoa(req.body))
-  console.log("Redirecting to:", newURL.toString())
-  res.redirect(303, newURL.toString())
+  console.log(req.method, req.originalUrl, req.headers)
+  const newURL = URL.parse('http://example.com/search:execute')
+  newURL.searchParams.append('q', btoa("test"))
+  const path = newURL.pathname + newURL.search
+  console.log("Redirecting to:", path)
+  res.redirect(303, path)
 });
 app.get("/search:execute", async (req, res)  => {
-  console.log("GET /search")
+  if (!req.headers['authorization']) {
+    console.log("401 Unauthorized")
+    res.status(401).send()
+    return
+  }
+  console.log(req.method, req.originalUrl, req.headers)
   if (req.header('If-None-Match') === '12345') {
     console.log("304 Not Modified")
     res.status(304).send()
     return
   }
   await new Promise(resolve => setTimeout(resolve, 5000))
-  res.setHeader('Cache-Control', 'private,no-cache,max-age=60');
+  res.setHeader('Cache-Control', 'private,no-cache');
   res.setHeader('Etag', '12345');
   res.send({ one: 'test', two: 'test' })
 });
 
-ViteExpress.listen(app, 3000, () =>
-  console.log("Server is listening on port 3000..."),
-);
+app.listen(port, () => {
+  console.log(`API listening on port ${port}`)
+})
