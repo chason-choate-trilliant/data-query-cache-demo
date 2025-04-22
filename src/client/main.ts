@@ -7,14 +7,11 @@ const apiURL = "https://api.eng.cachetest.io"
 async function requestData(path: string, method: string) {
   const res = await fetch(path, {
     method,
-    // cache: 'default',
-    // credentials: 'include',
     headers: {
-      "Accept": "*/*",
+      "Accept": "application/json",
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`
+      "Authorization": `Bearer ${token}`,
     },
-    // redirect: 'manual',
   })
   const data = await res.json()
   return data

@@ -9,9 +9,18 @@ const corsOptions = {
   methods: ['DELETE', 'OPTIONS', 'PATCH', 'PUT'],
   exposedHeaders: ['Etag'],
   credentials: true,
+  optionsSuccessStatus: 200,
 }
 
 app.set('etag', false)
+app.use((req, res, next) => {
+  console.log(req.method, req.originalUrl, req.headers)
+  next()
+})
+app.use((req, res, next) => {
+  res.setHeader("Strict-Transport-Security", "max-age=300; includeSubDomains; preload");
+  next()
+});
 app.use(cors(corsOptions))
 
 app.post("/search:create", (req, res)  => {
@@ -28,7 +37,6 @@ app.get("/search:execute", async (req, res)  => {
     res.status(401).send()
     return
   }
-  console.log(req.method, req.originalUrl, req.headers)
   if (req.header('If-None-Match') === '12345') {
     console.log("304 Not Modified")
     res.status(304).send()

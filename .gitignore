@@ -25,3 +25,4 @@ dist-ssr
 
 server_node_modules
 client_node_modules
+certs/*
