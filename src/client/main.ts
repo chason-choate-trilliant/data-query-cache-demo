@@ -3,7 +3,7 @@ import "./style.css";
 import typescriptLogo from "./typescript.svg";
 
 const token = 'blahblahblahblahblahblahblahblahblahblahblahblah'
-const apiURL = "https://api.eng.cachetest.io"
+const apiURL = "https://3847-136-226-2-178.ngrok-free.app"
 async function requestData(path: string, method: string) {
   const res = await fetch(path, {
     method,
@@ -11,6 +11,7 @@ async function requestData(path: string, method: string) {
       "Accept": "application/json",
       "Content-Type": "application/json",
       "Authorization": `Bearer ${token}`,
+      "ngrok-skip-browser-warning": "69420",
     },
   })
   const data = await res.json()

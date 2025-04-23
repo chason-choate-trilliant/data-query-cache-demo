@@ -4,8 +4,8 @@ import cors from 'cors';
 const app = express()
 const port = 3002
 const corsOptions = {
-  origin: 'https://home.cachetest.io',
-  allowedHeaders: ['Content-Type', 'Authorization', 'If-None-Match'],
+  origin: 'https://88be-136-226-2-178.ngrok-free.app',
+  allowedHeaders: ['Content-Type', 'Authorization', 'If-None-Match', 'ngrok-skip-browser-warning'],
   methods: ['DELETE', 'OPTIONS', 'PATCH', 'PUT'],
   exposedHeaders: ['Etag'],
   credentials: true,
